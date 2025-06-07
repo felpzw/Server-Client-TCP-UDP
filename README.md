@@ -1,6 +1,15 @@
 # Redes de Computadores - TCP & UDP
 
-Este projeto contém dois scripts Python para comunicação em rede usando os protocolos TCP e UDP:
+## Autores
+
+- Felipe Winsch (23102567)
+- Thomas Tavares Tomaz (23102571)
+
+## Introdução
+
+Este projeto, elaborado para a disciplina de Rede de Computadores na UFSC, tem como objetivo o desenvolvimento de um programa cliente servidor para comunicação usando os protocolos TCP e UDP.
+
+Foram desenvolvidos dois scripts Python para comunicação em rede:
 
 - `Server TCP&UDP.py`: servidor que aceita conexões TCP ou UDP.
 - `Client TCP&UDP.py`: cliente que se conecta ao servidor via TCP ou UDP.
@@ -9,9 +18,9 @@ Este projeto contém dois scripts Python para comunicação em rede usando os pr
 
 - Python 3.x
 
-## Como usar
+## Guia de Utilização
 
-### 1. Inicie o servidor
+### 1. Inicie o Servidor
 
 No terminal, execute:
 
@@ -20,18 +29,17 @@ python3 "Server TCP&UDP.py"
 ```
 
 Você será solicitado a informar:
-- O endereço IP do servidor (pressione Enter para usar `localhost`)
 - A porta do servidor (pressione Enter para usar `12345`)
 - O protocolo (`TCP` ou `UDP`)
 
 Exemplo:
 ```
-Digite o endereço IP do servidor (ou pressione Enter para usar 'localhost'):
+Deseja iniciar o servidor como 'localhost'? (SIM/NAO): S
 Digite a porta do servidor (ou pressione Enter para usar 12345):
 Escolha o protocolo (TCP/UDP): TCP
 ```
 
-### 2. Inicie o cliente
+### 2. Inicie o Cliente
 
 Em outro terminal, execute:
 
@@ -51,7 +59,7 @@ Digite a porta do servidor (ou pressione Enter para usar 12345):
 Escolha o protocolo (TCP/UDP): TCP
 ```
 
-### 3. Enviando mensagens
+### 3. Enviando Mensagens
 
 Digite mensagens para enviar ao servidor. Para enviar várias mensagens automaticamente, use o formato `->n`, onde `n` é o número de mensagens.
 
@@ -75,4 +83,3 @@ sair
 ## Possíveis problemas corrigidos
 
 - **Conversão de porta:** Nos scripts, ao pressionar Enter para usar o valor padrão da porta, pode ocorrer erro ao converter uma string vazia para inteiro. O código foi ajustado para garantir que o valor padrão seja usado corretamente.
-
