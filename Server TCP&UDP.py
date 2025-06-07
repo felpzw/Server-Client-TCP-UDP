@@ -1,5 +1,16 @@
 import socket
 
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Não precisa ser alcançavel
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = 'localhost'
+    finally:
+        s.close()
+    return IP
 
 def create_tcp_server(host='localhost', port=12345):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -9,7 +20,7 @@ def create_tcp_server(host='localhost', port=12345):
 
     sock.listen(1)
 
-    print(f"Servidor TCP iniciado por {host}:{port}")
+    print(f"Servidor TCP iniciado em {host}:{port}")
 
     while True:
         connection, client_address = sock.accept()
@@ -31,20 +42,20 @@ def create_udp_server(host='localhost', port=12345):
     server_address = (host, port)
     sock.bind(server_address)
 
-    print(f"UDP server iniciado em {host}:{port}")
+    print(f"Servidor UDP iniciado em {host}:{port}")
 
     while True:
         data, address = sock.recvfrom(1024)
         print(f"Recebeu {data.decode()} de {address}")
         sock.sendto(f"ECO DO SERVIDOR UDP: {data}", address)
 
-
-
-
 if __name__ == "__main__":
-
-    host = input("Digite o endereço IP do servidor (ou pressione Enter para usar 'localhost'): ")
-    if not host:
+    opt = input("Deseja iniciar o servidor como 'localhost'? (SIM/NAO): ").strip().upper()
+    if opt == 'NAO' or opt == 'N':
+        host = get_local_ip()
+    else:
+        if opt != 'SIM' and opt != 'S':
+            print("Opcao invalida. Atribuido como 'localhost'.")
         host = 'localhost'
     port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
     if not port_input:
@@ -57,4 +68,4 @@ if __name__ == "__main__":
     elif protocol == 'UDP':
         create_udp_server(host, port)
     else:
-        print("Protocolo inválido. Escolha TCP ou UDP.")
+        print("Protocolo invalido. Escolha TCP ou UDP.")
