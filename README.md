@@ -18,6 +18,92 @@ Foram desenvolvidos dois scripts Python para comunicação em rede:
 
 - Python 3.x
 
+## Servidor
+
+Inicialmente, foi desenvoldido um menu simples para seleção do IP, da porta e do protocolo de comunicação do servidor:
+
+```python
+if __name__ == "__main__":
+    opt = input("Deseja iniciar o servidor como 'localhost'? (SIM/NAO): ").strip().upper()
+    if opt == 'NAO' or opt == 'N':
+        host = get_local_ip()
+    else:
+        if opt != 'SIM' and opt != 'S':
+            print("Opcao invalida. Atribuido como 'localhost'.")
+        host = 'localhost'
+    port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
+    if not port_input:
+        port = 12345
+    else:
+        port = int(port_input)
+    protocol = input("Escolha o protocolo (TCP/UDP): ").strip().upper()
+    if protocol == 'TCP':
+        create_tcp_server(host, port)
+    elif protocol == 'UDP':
+        create_udp_server(host, port)
+    else:
+        print("Protocolo invalido. Escolha TCP ou UDP.")
+```
+
+Para comunicação via UDP, foi desenvolvida a função `create_udp_server()`:
+
+```python
+def create_udp_server(host='localhost', port=12345):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    server_address = (host, port)
+    sock.bind(server_address)
+
+    print(f"Servidor UDP iniciado em {host}:{port}")
+
+    while True:
+        data, address = sock.recvfrom(1024)
+        print(f"Recebeu {data.decode()} de {address}")
+        sock.sendto(f"ECO DO SERVIDOR UDP: {data}", address)
+```
+
+A função acima recebe o endereço IP do host e a porta de rede. Com esses valores, um objeto do tipo `socket` é criado, com os valores: `family = AF_INET` (IPv4) e `type = SOCK_DGRAM` (UDP).
+
+Na sequência, o método `bind()` é chamado, comunicando ao sistema operacional para receber dados no endereço de host e porta específicos (`server_address`).
+
+Por fim, a função entra em um loop para receber os dados e enviar mensagens de eco.
+
+Para comunicação via TCP, foi desenvolvida a função `create_tcp_server()`:
+
+```python
+def create_tcp_server(host='localhost', port=12345):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    server_address = (host, port)
+    sock.bind(server_address)
+
+    sock.listen(1)
+
+    print(f"Servidor TCP iniciado em {host}:{port}")
+
+    while True:
+        connection, client_address = sock.accept()
+        try:
+            print(f"Conexão de {client_address}")
+            while True:
+                data = connection.recv(1024)
+                if not data:
+                    break
+                print(f"Recebido: {data.decode()}")
+                connection.sendall(f"ECO DO SERVIDOR TCP: {data}")
+        finally:
+            connection.close()
+            print(f"Conexão fechada pelo cliente: {client_address}")
+```
+
+A função também recebe os mesmos dados que a anterior, mas cria um objeto `socket` com os valores: `family = AF_INET` (IPv4) e `type = SOCK_STREAM` (TCP).
+
+Após chamar o método `bind()` com o endereço do servidor, o método `listen()` define o socket como *listener* e o loop de recepção de dados é iniciado. Dentro do loop, a função aguarda o estabelecimento de uma conexão TCP com um cliente.
+
+Após estabelecimento da conexão, o loop interno garante o recebimento dos dados e o retorno das mensagens de eco.
+
+## Cliente
+
 ## Guia de Utilização
 
 ### 1. Inicie o Servidor
@@ -80,6 +166,13 @@ sair
 - O servidor responde com um eco da mensagem recebida.
 - Certifique-se de que a porta escolhida esteja livre e não bloqueada por firewall.
 
-## Possíveis problemas corrigidos
+## Possíveis Problemas Corrigidos
 
 - **Conversão de porta:** Nos scripts, ao pressionar Enter para usar o valor padrão da porta, pode ocorrer erro ao converter uma string vazia para inteiro. O código foi ajustado para garantir que o valor padrão seja usado corretamente.
+
+## Referências
+
+- UdpCommunication - Python Wiki. Disponível em: <https://wiki.python.org/moin/UdpCommunication>
+- TcpCommunication - Python Wiki. Disponível em: <https://wiki.python.org/moin/TcpCommunication>
+- PYTHON. socket — Low-level networking interface — Python 3.8.1 documentation. Disponível em: <https://docs.python.org/3/library/socket.html>
+- UNKWNTECH. Finding local IP addresses using Python’s stdlib. Disponível em: <https://stackoverflow.com/a/28950776>
