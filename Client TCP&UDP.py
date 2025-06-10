@@ -23,21 +23,25 @@ def connect_to_udp_server(host, port):
 
 def send_udp_message(client_socket, message, address):
     try:
+        start_time = time.time()
         client_socket.sendto(message.encode(), address)
         data, server = client_socket.recvfrom(1024)
-        print(f"Servidor respondeu: {data.decode()}")
+        elapsed = time.time() - start_time
+        print(f"{data.decode()} (Tempo de resposta: {elapsed:.3f} segundos)")
     except socket.timeout:
-        print("Timeout: No response from server (1 second)")
+        print("Timeout: Sem resposta do servidor (1 segundo)")
     except socket.error as e:
         print(f"Socket error: {e}")
 
 def send_tcp_message(client_socket, message):
     try:
+        start_time = time.time()
         client_socket.sendall(message.encode())
         response = client_socket.recv(1024).decode()
-        print(f"Servidor respondeu: {response}")
+        elapsed = time.time() - start_time
+        print(f"{response} (Tempo de resposta: {elapsed:.3f} segundos)")
     except socket.timeout:
-        print("Timeout: No response from server (1 seconds)")
+        print("Timeout: Sem resposta do servidor (1 segundo)")
     except socket.error as e:
         print(f"Socket error: {e}")
 

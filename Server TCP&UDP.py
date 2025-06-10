@@ -31,7 +31,6 @@ def create_tcp_server(host='localhost', port=12345):
                 if not data:
                     break
                 print(f"Recebido: {data.decode()}")
-                # Corrigido: encode a resposta antes de enviar
                 connection.sendall(f"ECO DO SERVIDOR TCP: {data.decode()}".encode())
         finally:
             connection.close()
@@ -48,7 +47,6 @@ def create_udp_server(host='localhost', port=12345):
     while True:
         data, address = sock.recvfrom(1024)
         print(f"Recebeu {data.decode()} de {address}")
-        # Corrigido: encode a resposta antes de enviar
         sock.sendto(f"ECO DO SERVIDOR UDP: {data.decode()}".encode(), address)
 
 if __name__ == "__main__":
