@@ -50,11 +50,16 @@ if __name__ == "__main__":
     host = input("Digite o endereço IP do servidor (ou pressione Enter para usar 'localhost'): ")
     if not host:
         host = 'localhost'
-    port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
-    if not port_input:
-        port = 12345
-    else:
-        port = int(port_input)
+    while True:
+        port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
+        if not port_input:
+            port = 12345
+            break
+        try:
+            port = int(port_input)
+            break
+        except ValueError:
+            print("Porta inválida. Digite um número inteiro ou pressione Enter para o padrão.")
     protocol = input("Escolha o protocolo (TCP/UDP): ").strip().upper()
     
     if protocol == 'TCP':
