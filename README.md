@@ -65,7 +65,7 @@ def create_udp_server(host='localhost', port=12345):
     while True:
         data, address = sock.recvfrom(1024)
         print(f"Recebeu {data.decode()} de {address}")
-        # Corrigido: encode a resposta antes de enviarAdd commentMore actions
+        # Corrigido: encode a resposta antes de enviar
         sock.sendto(f"ECO DO SERVIDOR UDP: {data.decode()}".encode(), address)
 ```
 
