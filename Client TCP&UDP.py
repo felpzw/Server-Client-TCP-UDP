@@ -77,7 +77,7 @@ if __name__ == "__main__":
                             print(f"Enviando: {msg}")
                             send_tcp_message(client_socket, msg)
                             time.sleep(1)
-                            continue
+                        continue
                     except ValueError:
                         print("Formato inválido. Use '->n' onde n é um número inteiro.")
                         continue
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                         print(f"Enviando: {msg}")
                         send_udp_message(client_socket, msg, address)
                         time.sleep(1)
-                        continue
+                    continue
                 except ValueError:
                     print("Formato inválido. Use '->n' onde n é um número inteiro.")
                     continue
