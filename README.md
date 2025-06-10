@@ -32,10 +32,16 @@ if __name__ == "__main__":
             print("Opcao invalida. Atribuido como 'localhost'.")
         host = 'localhost'
     port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
-    if not port_input:
-        port = 12345
-    else:
-        port = int(port_input)
+    while True:Add commentMore actions
+        port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
+        if not port_input:
+            port = 12345
+            break
+        try:
+            port = int(port_input)
+            break
+        except ValueError:
+            print("Porta inválida. Digite um número inteiro ou pressione Enter para o padrão.")
     protocol = input("Escolha o protocolo (TCP/UDP): ").strip().upper()
     if protocol == 'TCP':
         create_tcp_server(host, port)
@@ -59,7 +65,8 @@ def create_udp_server(host='localhost', port=12345):
     while True:
         data, address = sock.recvfrom(1024)
         print(f"Recebeu {data.decode()} de {address}")
-        sock.sendto(f"ECO DO SERVIDOR UDP: {data}", address)
+        # Corrigido: encode a resposta antes de enviarAdd commentMore actions
+        sock.sendto(f"ECO DO SERVIDOR UDP: {data.decode()}".encode(), address)
 ```
 
 A função acima recebe o endereço IP do host e a porta de rede. Com esses valores, um objeto do tipo `socket` é criado, com os valores: `family = AF_INET` (IPv4) e `type = SOCK_DGRAM` (UDP).
@@ -90,7 +97,8 @@ def create_tcp_server(host='localhost', port=12345):
                 if not data:
                     break
                 print(f"Recebido: {data.decode()}")
-                connection.sendall(f"ECO DO SERVIDOR TCP: {data}")
+                # Corrigido: encode a resposta antes de enviar
+                connection.sendall(f"ECO DO SERVIDOR TCP: {data.decode()}".encode())
         finally:
             connection.close()
             print(f"Conexão fechada pelo cliente: {client_address}")
@@ -112,10 +120,20 @@ if __name__ == "__main__":
     if not host:
         host = 'localhost'
     port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
-    if not port_input:
+    if not port_input:Add commentMore actions
         port = 12345
     else:
         port = int(port_input)
+    while True:
+        port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
+        if not port_input:
+            port = 12345
+            break
+        try:
+            port = int(port_input)
+            break
+        except ValueError:
+            print("Porta inválida. Digite um número inteiro ou pressione Enter para o padrão.")
     protocol = input("Escolha o protocolo (TCP/UDP): ").strip().upper()
 ```
 
