@@ -32,7 +32,7 @@ if __name__ == "__main__":
             print("Opcao invalida. Atribuido como 'localhost'.")
         host = 'localhost'
     port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
-    while True:Add commentMore actions
+    while True:
         port_input = input("Digite a porta do servidor (ou pressione Enter para usar 12345): ")
         if not port_input:
             port = 12345
