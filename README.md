@@ -65,7 +65,6 @@ def create_udp_server(host='localhost', port=12345):
     while True:
         data, address = sock.recvfrom(1024)
         print(f"Recebeu {data.decode()} de {address}")
-        # Corrigido: encode a resposta antes de enviar
         sock.sendto(f"ECO DO SERVIDOR UDP: {data.decode()}".encode(), address)
 ```
 
@@ -97,7 +96,6 @@ def create_tcp_server(host='localhost', port=12345):
                 if not data:
                     break
                 print(f"Recebido: {data.decode()}")
-                # Corrigido: encode a resposta antes de enviar
                 connection.sendall(f"ECO DO SERVIDOR TCP: {data.decode()}".encode())
         finally:
             connection.close()
@@ -172,11 +170,13 @@ A função `send_tcp_message()` é responsável por enviar e receber mensagens:
 ```python
 def send_tcp_message(client_socket, message):
     try:
+        start_time = time.time()
         client_socket.sendall(message.encode())
         response = client_socket.recv(1024).decode()
-        print(f"Servidor respondeu: {response}")
+        elapsed = time.time() - start_time
+        print(f"{response} (Tempo de resposta: {elapsed:.3f} segundos)")
     except socket.timeout:
-        print("Timeout: No response from server (1 seconds)")
+        print("Timeout: Sem resposta do servidor (1 segundo)")
     except socket.error as e:
         print(f"Socket error: {e}")
 ```
@@ -209,11 +209,13 @@ A função `send_udp_message()` envia uma mensagem ao servidor e tenta receber a
 ```python
 def send_udp_message(client_socket, message, address):
     try:
+        start_time = time.time()
         client_socket.sendto(message.encode(), address)
         data, server = client_socket.recvfrom(1024)
-        print(f"Servidor respondeu: {data.decode()}")
+        elapsed = time.time() - start_time
+        print(f"{data.decode()} (Tempo de resposta: {elapsed:.3f} segundos)"
     except socket.timeout:
-        print("Timeout: No response from server (1 second)")
+        print("Timeout: Sem resposta do servidor (1 segundo)")
     except socket.error as e:
         print(f"Socket error: {e}")
 ```
